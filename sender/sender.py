@@ -9,7 +9,6 @@ class Sender:
 
 		self.sender = udp_client.UDPClient(self.ip, self.port)
 
-
 	def sendValue(self, Address, Value):
 		print("sending %s to '%s'" % (Value, Address))
 		msg = osc_message_builder.OscMessageBuilder(address = Address)
