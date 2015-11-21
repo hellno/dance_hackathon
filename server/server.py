@@ -8,17 +8,20 @@ from pythonosc import osc_server
 class Server:
 
     def osc_handler(self, unused_addr, args, val):
-        print("{0}: {1}".format(args[0], val))
+        # print("{0}: {1}".format(args[0], val))
         
         try:
-            self.f.put(float(data.rstrip()))
+            self.filter.put(float(val))
         except ValueError:
             print("Cannot_ConvertLatestDataPacket")
         else:
-            self.class_nr  = self.f.latest_class(4)
+            self.class_nr  = self.filter.latest_class(4)
             
-            if(class_nr):    
-                print("latest class is %d " % (self.class_nr))
+            if(self.class_nr):    
+                print("class is %d " % (self.class_nr))
+                self.log.write("%d\n" % (self.class_nr))
+                self.log.flush()
+                
                 self.sender.sendValue("/w", self.class_nr)
 
 
@@ -27,6 +30,9 @@ class Server:
         self.sender = sender
         self.ip = ip
         self.port = port
+        self.class_nr = -1
+
+        self.log = open('log.txt', 'w', 3)
 
         self.dispatcher = dispatcher.Dispatcher()
         self.dispatcher.map("/", print)
@@ -34,8 +40,11 @@ class Server:
 
         self.server = osc_server.ThreadingOSCUDPServer(
             (self.ip, self.port), self.dispatcher)
-        print("Serving on {}".format(self.server.server_address))
+        print("Listening on {}".format(self.server.server_address))
         self.server.serve_forever()
+
+    def shutdown(self):
+        self.log.close()
 
         
         

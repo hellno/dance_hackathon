@@ -1,10 +1,14 @@
 import queue
+import math
 
 MAX_VALUES_IN_QUEUE = 100
 
 class Filter:
-	def __init__(self):
-		self.q = queue.Queue(MAX_VALUES_IN_QUEUE)
+	def __init__(self, MIN, MAX):
+		self.q = queue.Queue(abs(MAX - MIN))
+		self.range = MAX-MIN
+		if(self.range < 0):
+			sys.exit(1)
 
 	def put(self, Val):
 		self.q.put(Val)

@@ -8,6 +8,15 @@ RECEIVING_PORT = 4444
 TARGET_IP = "192.168.1.105"
 TARGET_PORT = 9000
 
-f = filter.Filter()
-s = sender.Sender(TARGET_IP, TARGET_PORT)
-server = server.Server(f, s, RECEIVING_IP, RECEIVING_PORT)
+RANGE_MIN = 0
+RANGE_MAX = 100
+
+filt = filter.Filter(RANGE_MIN, RANGE_MAX)
+send = sender.Sender(TARGET_IP, TARGET_PORT)
+serv = server.Server(filt, send, RECEIVING_IP, RECEIVING_PORT)
+while 1:
+    try:
+        pass
+    except KeyboardInterrupt:
+        print("tried to quit!")
+        serv.shutdown()
